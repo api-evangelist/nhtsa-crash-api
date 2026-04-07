@@ -8,11 +8,11 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - NHTSA
   - Crash Data
+  - Government
+  - NHTSA
   - Traffic Safety
   - Transportation
-  - Government
 url: >-
   https://raw.githubusercontent.com/api-evangelist/nhtsa-crash-api/refs/heads/main/apis.yml
 created: '2026-03-16'
@@ -27,8 +27,8 @@ apis:
     humanURL: https://crashviewer.nhtsa.dot.gov/CrashAPI
     tags:
       - Crash Data
-      - FARS
       - CRSS
+      - FARS
       - Traffic Safety
     properties:
       - type: Documentation
