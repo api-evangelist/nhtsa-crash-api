@@ -16,7 +16,7 @@ The NHTSA Crash Data API provides access to the National Highway Traffic Safety 
 ## Timestamps
 
 - **Created:** 2026-03-16 
-- **Modified:** 2026-03-16 
+- **Modified:** 2026-04-28 
 
 ## APIs
 
@@ -33,6 +33,7 @@ Access crash data from the National Highway Traffic Safety Administration includ
 #### Properties
 
 - [Documentation](https://crashviewer.nhtsa.dot.gov/CrashAPI)
+- [OpenAPI](openapi/nhtsa-crash-api-nhtsa-crash-data-api-openapi.yml)
 
 ## Common Properties
 
