@@ -1,0 +1,514 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: NHTSA Crash Data API
+  description: The NHTSA Crash Data API provides public access to U.S. National Highway Traffic Safety Administration crash
+    datasets including the Fatality Analysis Reporting System (FARS) and the Crash Report Sampling System (CRSS). The API
+    exposes case lists, case details, and aggregated crash queries by location, vehicle, and occupant via REST endpoints that
+    return JSON, XML, or CSV.
+  tags:
+  - Nhtsa
+  - Crash
+  - Api
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: nhtsa-crash-api
+    baseUri: https://crashviewer.nhtsa.dot.gov/CrashAPI
+    description: NHTSA Crash Data API HTTP API.
+    resources:
+    - name: farsdata-getfarsdata
+      path: /FARSData/GetFARSData
+      operations:
+      - name: getfarsdata
+        method: GET
+        description: Get FARS dataset
+        inputParameters:
+        - name: dataset
+          in: query
+          type: string
+          required: true
+          description: FARS dataset name (e.g., Accident, Vehicle, Person).
+        - name: caseYear
+          in: query
+          type: integer
+          required: true
+          description: Case year (YYYY).
+        - name: format
+          in: query
+          type: string
+          description: Response format.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: crashes-getcaselist
+      path: /crashes/GetCaseList
+      operations:
+      - name: getcaselist
+        method: GET
+        description: Get case list
+        inputParameters:
+        - name: states
+          in: query
+          type: string
+          required: true
+          description: State FIPS code(s), comma separated.
+        - name: fromCaseYear
+          in: query
+          type: integer
+          required: true
+          description: Beginning case year.
+        - name: toCaseYear
+          in: query
+          type: integer
+          required: true
+          description: Ending case year.
+        - name: minNumOfVehicles
+          in: query
+          type: integer
+          description: Minimum number of vehicles involved.
+        - name: maxNumOfVehicles
+          in: query
+          type: integer
+          description: Maximum number of vehicles involved.
+        - name: format
+          in: query
+          type: string
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: crashes-getcasedetails
+      path: /crashes/GetCaseDetails
+      operations:
+      - name: getcasedetails
+        method: GET
+        description: Get case details
+        inputParameters:
+        - name: stateCase
+          in: query
+          type: string
+          required: true
+          description: State case number.
+        - name: caseYear
+          in: query
+          type: integer
+          required: true
+        - name: state
+          in: query
+          type: integer
+          required: true
+          description: State FIPS code.
+        - name: format
+          in: query
+          type: string
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: crashes-getcrashesbylocation
+      path: /crashes/GetCrashesByLocation
+      operations:
+      - name: getcrashesbylocation
+        method: GET
+        description: Get crashes by location
+        inputParameters:
+        - name: fromCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: toCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: state
+          in: query
+          type: integer
+          required: true
+          description: State FIPS code.
+        - name: county
+          in: query
+          type: integer
+          description: County FIPS code.
+        - name: format
+          in: query
+          type: string
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: crashes-getcrashesbyvehicle
+      path: /crashes/GetCrashesByVehicle
+      operations:
+      - name: getcrashesbyvehicle
+        method: GET
+        description: Get crashes by vehicle
+        inputParameters:
+        - name: fromCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: toCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: state
+          in: query
+          type: integer
+          required: true
+        - name: vPicMake
+          in: query
+          type: string
+        - name: vPicModel
+          in: query
+          type: string
+        - name: vPicBodyClass
+          in: query
+          type: string
+        - name: format
+          in: query
+          type: string
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: crashes-getcrashesbyoccupant
+      path: /crashes/GetCrashesByOccupant
+      operations:
+      - name: getcrashesbyoccupant
+        method: GET
+        description: Get crashes by occupant
+        inputParameters:
+        - name: fromCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: toCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: state
+          in: query
+          type: integer
+          required: true
+        - name: minAge
+          in: query
+          type: integer
+        - name: maxAge
+          in: query
+          type: integer
+        - name: sex
+          in: query
+          type: integer
+        - name: seatPos
+          in: query
+          type: integer
+        - name: format
+          in: query
+          type: string
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: nhtsa-crash-api-rest
+    description: REST adapter for NHTSA Crash Data API.
+    resources:
+    - path: /FARSData/GetFARSData
+      name: getfarsdata
+      operations:
+      - method: GET
+        name: getfarsdata
+        description: Get FARS dataset
+        call: nhtsa-crash-api.getfarsdata
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /crashes/GetCaseList
+      name: getcaselist
+      operations:
+      - method: GET
+        name: getcaselist
+        description: Get case list
+        call: nhtsa-crash-api.getcaselist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /crashes/GetCaseDetails
+      name: getcasedetails
+      operations:
+      - method: GET
+        name: getcasedetails
+        description: Get case details
+        call: nhtsa-crash-api.getcasedetails
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /crashes/GetCrashesByLocation
+      name: getcrashesbylocation
+      operations:
+      - method: GET
+        name: getcrashesbylocation
+        description: Get crashes by location
+        call: nhtsa-crash-api.getcrashesbylocation
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /crashes/GetCrashesByVehicle
+      name: getcrashesbyvehicle
+      operations:
+      - method: GET
+        name: getcrashesbyvehicle
+        description: Get crashes by vehicle
+        call: nhtsa-crash-api.getcrashesbyvehicle
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /crashes/GetCrashesByOccupant
+      name: getcrashesbyoccupant
+      operations:
+      - method: GET
+        name: getcrashesbyoccupant
+        description: Get crashes by occupant
+        call: nhtsa-crash-api.getcrashesbyoccupant
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: nhtsa-crash-api-mcp
+    transport: http
+    description: MCP adapter for NHTSA Crash Data API for AI agent use.
+    tools:
+    - name: getfarsdata
+      description: Get FARS dataset
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-api.getfarsdata
+      with:
+        dataset: tools.dataset
+        caseYear: tools.caseYear
+        format: tools.format
+      inputParameters:
+      - name: dataset
+        type: string
+        description: FARS dataset name (e.g., Accident, Vehicle, Person).
+        required: true
+      - name: caseYear
+        type: integer
+        description: Case year (YYYY).
+        required: true
+      - name: format
+        type: string
+        description: Response format.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcaselist
+      description: Get case list
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-api.getcaselist
+      with:
+        states: tools.states
+        fromCaseYear: tools.fromCaseYear
+        toCaseYear: tools.toCaseYear
+        minNumOfVehicles: tools.minNumOfVehicles
+        maxNumOfVehicles: tools.maxNumOfVehicles
+        format: tools.format
+      inputParameters:
+      - name: states
+        type: string
+        description: State FIPS code(s), comma separated.
+        required: true
+      - name: fromCaseYear
+        type: integer
+        description: Beginning case year.
+        required: true
+      - name: toCaseYear
+        type: integer
+        description: Ending case year.
+        required: true
+      - name: minNumOfVehicles
+        type: integer
+        description: Minimum number of vehicles involved.
+      - name: maxNumOfVehicles
+        type: integer
+        description: Maximum number of vehicles involved.
+      - name: format
+        type: string
+        description: format
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcasedetails
+      description: Get case details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-api.getcasedetails
+      with:
+        stateCase: tools.stateCase
+        caseYear: tools.caseYear
+        state: tools.state
+        format: tools.format
+      inputParameters:
+      - name: stateCase
+        type: string
+        description: State case number.
+        required: true
+      - name: caseYear
+        type: integer
+        description: caseYear
+        required: true
+      - name: state
+        type: integer
+        description: State FIPS code.
+        required: true
+      - name: format
+        type: string
+        description: format
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcrashesbylocation
+      description: Get crashes by location
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-api.getcrashesbylocation
+      with:
+        fromCaseYear: tools.fromCaseYear
+        toCaseYear: tools.toCaseYear
+        state: tools.state
+        county: tools.county
+        format: tools.format
+      inputParameters:
+      - name: fromCaseYear
+        type: integer
+        description: fromCaseYear
+        required: true
+      - name: toCaseYear
+        type: integer
+        description: toCaseYear
+        required: true
+      - name: state
+        type: integer
+        description: State FIPS code.
+        required: true
+      - name: county
+        type: integer
+        description: County FIPS code.
+      - name: format
+        type: string
+        description: format
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcrashesbyvehicle
+      description: Get crashes by vehicle
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-api.getcrashesbyvehicle
+      with:
+        fromCaseYear: tools.fromCaseYear
+        toCaseYear: tools.toCaseYear
+        state: tools.state
+        vPicMake: tools.vPicMake
+        vPicModel: tools.vPicModel
+        vPicBodyClass: tools.vPicBodyClass
+        format: tools.format
+      inputParameters:
+      - name: fromCaseYear
+        type: integer
+        description: fromCaseYear
+        required: true
+      - name: toCaseYear
+        type: integer
+        description: toCaseYear
+        required: true
+      - name: state
+        type: integer
+        description: state
+        required: true
+      - name: vPicMake
+        type: string
+        description: vPicMake
+      - name: vPicModel
+        type: string
+        description: vPicModel
+      - name: vPicBodyClass
+        type: string
+        description: vPicBodyClass
+      - name: format
+        type: string
+        description: format
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcrashesbyoccupant
+      description: Get crashes by occupant
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-api.getcrashesbyoccupant
+      with:
+        fromCaseYear: tools.fromCaseYear
+        toCaseYear: tools.toCaseYear
+        state: tools.state
+        minAge: tools.minAge
+        maxAge: tools.maxAge
+        sex: tools.sex
+        seatPos: tools.seatPos
+        format: tools.format
+      inputParameters:
+      - name: fromCaseYear
+        type: integer
+        description: fromCaseYear
+        required: true
+      - name: toCaseYear
+        type: integer
+        description: toCaseYear
+        required: true
+      - name: state
+        type: integer
+        description: state
+        required: true
+      - name: minAge
+        type: integer
+        description: minAge
+      - name: maxAge
+        type: integer
+        description: maxAge
+      - name: sex
+        type: integer
+        description: sex
+      - name: seatPos
+        type: integer
+        description: seatPos
+      - name: format
+        type: string
+        description: format
+      outputParameters:
+      - type: object
+        mapping: $.
