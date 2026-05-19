@@ -1,0 +1,168 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: NHTSA Crash Data API — Cases
+  description: 'NHTSA Crash Data API — Cases. 2 operations. Lead operation: Get case details. Self-contained Naftiko capability
+    covering one Nhtsa Crash Api business surface.'
+  tags:
+  - Nhtsa Crash Api
+  - Cases
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    NHTSA_CRASH_API_API_KEY: NHTSA_CRASH_API_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: nhtsa-crash-data-cases
+    baseUri: https://crashviewer.nhtsa.dot.gov/CrashAPI
+    description: NHTSA Crash Data API — Cases business capability. Self-contained, no shared references.
+    resources:
+    - name: crashes-GetCaseDetails
+      path: /crashes/GetCaseDetails
+      operations:
+      - name: getcasedetails
+        method: GET
+        description: Get case details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: stateCase
+          in: query
+          type: string
+          description: State case number.
+          required: true
+        - name: caseYear
+          in: query
+          type: integer
+          required: true
+        - name: state
+          in: query
+          type: integer
+          description: State FIPS code.
+          required: true
+        - name: format
+          in: query
+          type: string
+    - name: crashes-GetCaseList
+      path: /crashes/GetCaseList
+      operations:
+      - name: getcaselist
+        method: GET
+        description: Get case list
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: states
+          in: query
+          type: string
+          description: State FIPS code(s), comma separated.
+          required: true
+        - name: fromCaseYear
+          in: query
+          type: integer
+          description: Beginning case year.
+          required: true
+        - name: toCaseYear
+          in: query
+          type: integer
+          description: Ending case year.
+          required: true
+        - name: minNumOfVehicles
+          in: query
+          type: integer
+          description: Minimum number of vehicles involved.
+        - name: maxNumOfVehicles
+          in: query
+          type: integer
+          description: Maximum number of vehicles involved.
+        - name: format
+          in: query
+          type: string
+  exposes:
+  - type: rest
+    namespace: nhtsa-crash-data-cases-rest
+    port: 8080
+    description: REST adapter for NHTSA Crash Data API — Cases. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/crashes/getcasedetails
+      name: crashes-getcasedetails
+      description: REST surface for crashes-GetCaseDetails.
+      operations:
+      - method: GET
+        name: getcasedetails
+        description: Get case details
+        call: nhtsa-crash-data-cases.getcasedetails
+        with:
+          stateCase: rest.stateCase
+          caseYear: rest.caseYear
+          state: rest.state
+          format: rest.format
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/crashes/getcaselist
+      name: crashes-getcaselist
+      description: REST surface for crashes-GetCaseList.
+      operations:
+      - method: GET
+        name: getcaselist
+        description: Get case list
+        call: nhtsa-crash-data-cases.getcaselist
+        with:
+          states: rest.states
+          fromCaseYear: rest.fromCaseYear
+          toCaseYear: rest.toCaseYear
+          minNumOfVehicles: rest.minNumOfVehicles
+          maxNumOfVehicles: rest.maxNumOfVehicles
+          format: rest.format
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: nhtsa-crash-data-cases-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for NHTSA Crash Data API — Cases. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: get-case-details
+      description: Get case details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-data-cases.getcasedetails
+      with:
+        stateCase: tools.stateCase
+        caseYear: tools.caseYear
+        state: tools.state
+        format: tools.format
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-case-list
+      description: Get case list
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-data-cases.getcaselist
+      with:
+        states: tools.states
+        fromCaseYear: tools.fromCaseYear
+        toCaseYear: tools.toCaseYear
+        minNumOfVehicles: tools.minNumOfVehicles
+        maxNumOfVehicles: tools.maxNumOfVehicles
+        format: tools.format
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,251 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: NHTSA Crash Data API — Crashes
+  description: 'NHTSA Crash Data API — Crashes. 3 operations. Lead operation: Get crashes by location. Self-contained Naftiko
+    capability covering one Nhtsa Crash Api business surface.'
+  tags:
+  - Nhtsa Crash Api
+  - Crashes
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    NHTSA_CRASH_API_API_KEY: NHTSA_CRASH_API_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: nhtsa-crash-data-crashes
+    baseUri: https://crashviewer.nhtsa.dot.gov/CrashAPI
+    description: NHTSA Crash Data API — Crashes business capability. Self-contained, no shared references.
+    resources:
+    - name: crashes-GetCrashesByLocation
+      path: /crashes/GetCrashesByLocation
+      operations:
+      - name: getcrashesbylocation
+        method: GET
+        description: Get crashes by location
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: fromCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: toCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: state
+          in: query
+          type: integer
+          description: State FIPS code.
+          required: true
+        - name: county
+          in: query
+          type: integer
+          description: County FIPS code.
+        - name: format
+          in: query
+          type: string
+    - name: crashes-GetCrashesByOccupant
+      path: /crashes/GetCrashesByOccupant
+      operations:
+      - name: getcrashesbyoccupant
+        method: GET
+        description: Get crashes by occupant
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: fromCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: toCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: state
+          in: query
+          type: integer
+          required: true
+        - name: minAge
+          in: query
+          type: integer
+        - name: maxAge
+          in: query
+          type: integer
+        - name: sex
+          in: query
+          type: integer
+        - name: seatPos
+          in: query
+          type: integer
+        - name: format
+          in: query
+          type: string
+    - name: crashes-GetCrashesByVehicle
+      path: /crashes/GetCrashesByVehicle
+      operations:
+      - name: getcrashesbyvehicle
+        method: GET
+        description: Get crashes by vehicle
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: fromCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: toCaseYear
+          in: query
+          type: integer
+          required: true
+        - name: state
+          in: query
+          type: integer
+          required: true
+        - name: vPicMake
+          in: query
+          type: string
+        - name: vPicModel
+          in: query
+          type: string
+        - name: vPicBodyClass
+          in: query
+          type: string
+        - name: format
+          in: query
+          type: string
+  exposes:
+  - type: rest
+    namespace: nhtsa-crash-data-crashes-rest
+    port: 8080
+    description: REST adapter for NHTSA Crash Data API — Crashes. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/crashes/getcrashesbylocation
+      name: crashes-getcrashesbylocation
+      description: REST surface for crashes-GetCrashesByLocation.
+      operations:
+      - method: GET
+        name: getcrashesbylocation
+        description: Get crashes by location
+        call: nhtsa-crash-data-crashes.getcrashesbylocation
+        with:
+          fromCaseYear: rest.fromCaseYear
+          toCaseYear: rest.toCaseYear
+          state: rest.state
+          county: rest.county
+          format: rest.format
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/crashes/getcrashesbyoccupant
+      name: crashes-getcrashesbyoccupant
+      description: REST surface for crashes-GetCrashesByOccupant.
+      operations:
+      - method: GET
+        name: getcrashesbyoccupant
+        description: Get crashes by occupant
+        call: nhtsa-crash-data-crashes.getcrashesbyoccupant
+        with:
+          fromCaseYear: rest.fromCaseYear
+          toCaseYear: rest.toCaseYear
+          state: rest.state
+          minAge: rest.minAge
+          maxAge: rest.maxAge
+          sex: rest.sex
+          seatPos: rest.seatPos
+          format: rest.format
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/crashes/getcrashesbyvehicle
+      name: crashes-getcrashesbyvehicle
+      description: REST surface for crashes-GetCrashesByVehicle.
+      operations:
+      - method: GET
+        name: getcrashesbyvehicle
+        description: Get crashes by vehicle
+        call: nhtsa-crash-data-crashes.getcrashesbyvehicle
+        with:
+          fromCaseYear: rest.fromCaseYear
+          toCaseYear: rest.toCaseYear
+          state: rest.state
+          vPicMake: rest.vPicMake
+          vPicModel: rest.vPicModel
+          vPicBodyClass: rest.vPicBodyClass
+          format: rest.format
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: nhtsa-crash-data-crashes-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for NHTSA Crash Data API — Crashes. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: get-crashes-location
+      description: Get crashes by location
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-data-crashes.getcrashesbylocation
+      with:
+        fromCaseYear: tools.fromCaseYear
+        toCaseYear: tools.toCaseYear
+        state: tools.state
+        county: tools.county
+        format: tools.format
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-crashes-occupant
+      description: Get crashes by occupant
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-data-crashes.getcrashesbyoccupant
+      with:
+        fromCaseYear: tools.fromCaseYear
+        toCaseYear: tools.toCaseYear
+        state: tools.state
+        minAge: tools.minAge
+        maxAge: tools.maxAge
+        sex: tools.sex
+        seatPos: tools.seatPos
+        format: tools.format
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-crashes-vehicle
+      description: Get crashes by vehicle
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-data-crashes.getcrashesbyvehicle
+      with:
+        fromCaseYear: tools.fromCaseYear
+        toCaseYear: tools.toCaseYear
+        state: tools.state
+        vPicMake: tools.vPicMake
+        vPicModel: tools.vPicModel
+        vPicBodyClass: tools.vPicBodyClass
+        format: tools.format
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,90 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: NHTSA Crash Data API — FARS
+  description: 'NHTSA Crash Data API — FARS. 1 operations. Lead operation: Get FARS dataset. Self-contained Naftiko capability
+    covering one Nhtsa Crash Api business surface.'
+  tags:
+  - Nhtsa Crash Api
+  - FARS
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    NHTSA_CRASH_API_API_KEY: NHTSA_CRASH_API_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: nhtsa-crash-data-fars
+    baseUri: https://crashviewer.nhtsa.dot.gov/CrashAPI
+    description: NHTSA Crash Data API — FARS business capability. Self-contained, no shared references.
+    resources:
+    - name: FARSData-GetFARSData
+      path: /FARSData/GetFARSData
+      operations:
+      - name: getfarsdata
+        method: GET
+        description: Get FARS dataset
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: dataset
+          in: query
+          type: string
+          description: FARS dataset name (e.g., Accident, Vehicle, Person).
+          required: true
+        - name: caseYear
+          in: query
+          type: integer
+          description: Case year (YYYY).
+          required: true
+        - name: format
+          in: query
+          type: string
+          description: Response format.
+  exposes:
+  - type: rest
+    namespace: nhtsa-crash-data-fars-rest
+    port: 8080
+    description: REST adapter for NHTSA Crash Data API — FARS. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/farsdata/getfarsdata
+      name: farsdata-getfarsdata
+      description: REST surface for FARSData-GetFARSData.
+      operations:
+      - method: GET
+        name: getfarsdata
+        description: Get FARS dataset
+        call: nhtsa-crash-data-fars.getfarsdata
+        with:
+          dataset: rest.dataset
+          caseYear: rest.caseYear
+          format: rest.format
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: nhtsa-crash-data-fars-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for NHTSA Crash Data API — FARS. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: get-fars-dataset
+      description: Get FARS dataset
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: nhtsa-crash-data-fars.getfarsdata
+      with:
+        dataset: tools.dataset
+        caseYear: tools.caseYear
+        format: tools.format
+      outputParameters:
+      - type: object
+        mapping: $.
