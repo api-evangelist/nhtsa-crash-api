@@ -5,7 +5,7 @@ description: >-
   crash reports, vehicle information, and safety statistics collected through the Fatality Analysis Reporting System
   (FARS) and Crash Report Sampling System (CRSS).
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - Crash Data
   - Government
