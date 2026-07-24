@@ -1,0 +1,198 @@
+openapi: 3.1.0
+info:
+  title: NHTSA Crash Data Cases Crashes API
+  description: The NHTSA Crash Data API provides public access to U.S. National Highway Traffic Safety Administration crash datasets including the Fatality Analysis Reporting System (FARS) and the Crash Report Sampling System (CRSS). The API exposes case lists, case details, and aggregated crash queries by location, vehicle, and occupant via REST endpoints that return JSON, XML, or CSV.
+  version: '1.0'
+  contact:
+    name: NHTSA
+    url: https://www.nhtsa.gov/contact
+  license:
+    name: U.S. Government Public Domain
+    url: https://www.usa.gov/government-works
+servers:
+- url: https://crashviewer.nhtsa.dot.gov/CrashAPI
+  description: Production
+tags:
+- name: Crashes
+  description: Crash queries by location, vehicle, and occupant
+paths:
+  /crashes/GetCrashesByLocation:
+    get:
+      operationId: getCrashesByLocation
+      summary: Get crashes by location
+      description: Returns crashes filtered by state, year range, and county.
+      tags:
+      - Crashes
+      parameters:
+      - name: fromCaseYear
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: toCaseYear
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: state
+        in: query
+        required: true
+        description: State FIPS code.
+        schema:
+          type: integer
+      - name: county
+        in: query
+        required: false
+        description: County FIPS code.
+        schema:
+          type: integer
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          - csv
+          default: json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrashApiResponse'
+  /crashes/GetCrashesByVehicle:
+    get:
+      operationId: getCrashesByVehicle
+      summary: Get crashes by vehicle
+      description: Returns crashes filtered by vehicle make, model, and body type for a given year range.
+      tags:
+      - Crashes
+      parameters:
+      - name: fromCaseYear
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: toCaseYear
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: state
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: vPicMake
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: vPicModel
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: vPicBodyClass
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          - csv
+          default: json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrashApiResponse'
+  /crashes/GetCrashesByOccupant:
+    get:
+      operationId: getCrashesByOccupant
+      summary: Get crashes by occupant
+      description: Returns crashes filtered by occupant age, sex, and seat position for a given year range.
+      tags:
+      - Crashes
+      parameters:
+      - name: fromCaseYear
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: toCaseYear
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: state
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: minAge
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: maxAge
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: sex
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: seatPos
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          - csv
+          default: json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrashApiResponse'
+components:
+  schemas:
+    CrashApiResponse:
+      type: object
+      properties:
+        Count:
+          type: integer
+          description: Number of records returned.
+        Message:
+          type: string
+        Results:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+externalDocs:
+  description: NHTSA Crash API Documentation
+  url: https://crashviewer.nhtsa.dot.gov/CrashAPI

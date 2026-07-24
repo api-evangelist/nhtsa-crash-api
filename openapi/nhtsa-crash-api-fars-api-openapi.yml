@@ -1,0 +1,76 @@
+openapi: 3.1.0
+info:
+  title: NHTSA Crash Data Cases FARS API
+  description: The NHTSA Crash Data API provides public access to U.S. National Highway Traffic Safety Administration crash datasets including the Fatality Analysis Reporting System (FARS) and the Crash Report Sampling System (CRSS). The API exposes case lists, case details, and aggregated crash queries by location, vehicle, and occupant via REST endpoints that return JSON, XML, or CSV.
+  version: '1.0'
+  contact:
+    name: NHTSA
+    url: https://www.nhtsa.gov/contact
+  license:
+    name: U.S. Government Public Domain
+    url: https://www.usa.gov/government-works
+servers:
+- url: https://crashviewer.nhtsa.dot.gov/CrashAPI
+  description: Production
+tags:
+- name: FARS
+  description: Fatality Analysis Reporting System datasets and queries
+paths:
+  /FARSData/GetFARSData:
+    get:
+      operationId: getFARSData
+      summary: Get FARS dataset
+      description: Returns FARS dataset records for the specified case year and dataset name.
+      tags:
+      - FARS
+      parameters:
+      - name: dataset
+        in: query
+        required: true
+        description: FARS dataset name (e.g., Accident, Vehicle, Person).
+        schema:
+          type: string
+      - name: caseYear
+        in: query
+        required: true
+        description: Case year (YYYY).
+        schema:
+          type: integer
+      - name: format
+        in: query
+        required: false
+        description: Response format.
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          - csv
+          default: json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrashApiResponse'
+            application/xml: {}
+            text/csv: {}
+components:
+  schemas:
+    CrashApiResponse:
+      type: object
+      properties:
+        Count:
+          type: integer
+          description: Number of records returned.
+        Message:
+          type: string
+        Results:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+externalDocs:
+  description: NHTSA Crash API Documentation
+  url: https://crashviewer.nhtsa.dot.gov/CrashAPI

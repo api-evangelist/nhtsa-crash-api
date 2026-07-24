@@ -1,0 +1,133 @@
+openapi: 3.1.0
+info:
+  title: NHTSA Crash Data Cases API
+  description: The NHTSA Crash Data API provides public access to U.S. National Highway Traffic Safety Administration crash datasets including the Fatality Analysis Reporting System (FARS) and the Crash Report Sampling System (CRSS). The API exposes case lists, case details, and aggregated crash queries by location, vehicle, and occupant via REST endpoints that return JSON, XML, or CSV.
+  version: '1.0'
+  contact:
+    name: NHTSA
+    url: https://www.nhtsa.gov/contact
+  license:
+    name: U.S. Government Public Domain
+    url: https://www.usa.gov/government-works
+servers:
+- url: https://crashviewer.nhtsa.dot.gov/CrashAPI
+  description: Production
+tags:
+- name: Cases
+  description: Case list and case detail lookups
+paths:
+  /crashes/GetCaseList:
+    get:
+      operationId: getCaseList
+      summary: Get case list
+      description: Returns a list of crash cases filtered by state, year range, and vehicle count.
+      tags:
+      - Cases
+      parameters:
+      - name: states
+        in: query
+        required: true
+        description: State FIPS code(s), comma separated.
+        schema:
+          type: string
+      - name: fromCaseYear
+        in: query
+        required: true
+        description: Beginning case year.
+        schema:
+          type: integer
+      - name: toCaseYear
+        in: query
+        required: true
+        description: Ending case year.
+        schema:
+          type: integer
+      - name: minNumOfVehicles
+        in: query
+        required: false
+        description: Minimum number of vehicles involved.
+        schema:
+          type: integer
+      - name: maxNumOfVehicles
+        in: query
+        required: false
+        description: Maximum number of vehicles involved.
+        schema:
+          type: integer
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          - csv
+          default: json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrashApiResponse'
+  /crashes/GetCaseDetails:
+    get:
+      operationId: getCaseDetails
+      summary: Get case details
+      description: Returns full case details for a specific state case number and year.
+      tags:
+      - Cases
+      parameters:
+      - name: stateCase
+        in: query
+        required: true
+        description: State case number.
+        schema:
+          type: string
+      - name: caseYear
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: state
+        in: query
+        required: true
+        description: State FIPS code.
+        schema:
+          type: integer
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          - csv
+          default: json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrashApiResponse'
+components:
+  schemas:
+    CrashApiResponse:
+      type: object
+      properties:
+        Count:
+          type: integer
+          description: Number of records returned.
+        Message:
+          type: string
+        Results:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+externalDocs:
+  description: NHTSA Crash API Documentation
+  url: https://crashviewer.nhtsa.dot.gov/CrashAPI
