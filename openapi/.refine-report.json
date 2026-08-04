@@ -1,0 +1,18 @@
+{
+  "provider": "nhtsa-crash-api",
+  "sources": [
+    "nhtsa-crash-api-cases-api-openapi.yml",
+    "nhtsa-crash-api-crashes-api-openapi.yml",
+    "nhtsa-crash-api-fars-api-openapi.yml"
+  ],
+  "outputs": [
+    "nhtsa-crash-api-cases-api-openapi.yml",
+    "nhtsa-crash-api-crashes-api-openapi.yml",
+    "nhtsa-crash-api-fars-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
