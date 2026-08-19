@@ -1,0 +1,159 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NHTSA Crash Data Cases Crashes API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Crashes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get crashes by location",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://crashviewer.nhtsa.dot.gov/CrashAPI/crashes/GetCrashesByLocation",
+            "params": [
+              {
+                "name": "fromCaseYear",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "toCaseYear",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "State FIPS code."
+              },
+              {
+                "name": "county",
+                "value": "",
+                "type": "query",
+                "description": "County FIPS code."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns crashes filtered by state, year range, and county."
+        },
+        {
+          "info": {
+            "name": "Get crashes by vehicle",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://crashviewer.nhtsa.dot.gov/CrashAPI/crashes/GetCrashesByVehicle",
+            "params": [
+              {
+                "name": "fromCaseYear",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "toCaseYear",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "vPicMake",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "vPicModel",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "vPicBodyClass",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns crashes filtered by vehicle make, model, and body type for a given year range."
+        },
+        {
+          "info": {
+            "name": "Get crashes by occupant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://crashviewer.nhtsa.dot.gov/CrashAPI/crashes/GetCrashesByOccupant",
+            "params": [
+              {
+                "name": "fromCaseYear",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "toCaseYear",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "minAge",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "maxAge",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sex",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "seatPos",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns crashes filtered by occupant age, sex, and seat position for a given year range."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

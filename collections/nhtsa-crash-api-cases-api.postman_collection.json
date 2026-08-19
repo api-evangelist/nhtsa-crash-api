@@ -1,0 +1,278 @@
+{
+  "item": [
+    {
+      "id": "d8be43ce-a9e9-4973-95b5-f37a49c28a43",
+      "name": "Cases",
+      "description": {
+        "content": "Case list and case detail lookups",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8477fbd7-7384-49a9-af5a-fedb4dc4c795",
+          "name": "Get case list",
+          "request": {
+            "name": "Get case list",
+            "description": {
+              "content": "Returns a list of crash cases filtered by state, year range, and vehicle count.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "crashes",
+                "GetCaseList"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "states",
+                  "value": "<string>",
+                  "description": "(Required) State FIPS code(s), comma separated."
+                },
+                {
+                  "disabled": false,
+                  "key": "fromCaseYear",
+                  "value": "<integer>",
+                  "description": "(Required) Beginning case year."
+                },
+                {
+                  "disabled": false,
+                  "key": "toCaseYear",
+                  "value": "<integer>",
+                  "description": "(Required) Ending case year."
+                },
+                {
+                  "disabled": false,
+                  "key": "minNumOfVehicles",
+                  "value": "<integer>",
+                  "description": "Minimum number of vehicles involved."
+                },
+                {
+                  "disabled": false,
+                  "key": "maxNumOfVehicles",
+                  "value": "<integer>",
+                  "description": "Maximum number of vehicles involved."
+                },
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "json"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "32259f9b-b843-4731-b181-4804fed7337c",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "crashes",
+                    "GetCaseList"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromCaseYear",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "toCaseYear",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "minNumOfVehicles",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "maxNumOfVehicles",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "json"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Count\": 8182,\n  \"Message\": \"string\",\n  \"Results\": [\n    {\n      \"key_0\": true\n    },\n    {\n      \"key_0\": 5422.405753994647\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e67913cc-c583-4530-be8e-8400d0bb8ce1",
+          "name": "Get case details",
+          "request": {
+            "name": "Get case details",
+            "description": {
+              "content": "Returns full case details for a specific state case number and year.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "crashes",
+                "GetCaseDetails"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "stateCase",
+                  "value": "<string>",
+                  "description": "(Required) State case number."
+                },
+                {
+                  "disabled": false,
+                  "key": "caseYear",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "state",
+                  "value": "<integer>",
+                  "description": "(Required) State FIPS code."
+                },
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "json"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c6de28b6-bcf4-4eea-aef2-fe21f15b8b40",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "crashes",
+                    "GetCaseDetails"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stateCase",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "caseYear",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "json"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Count\": 8182,\n  \"Message\": \"string\",\n  \"Results\": [\n    {\n      \"key_0\": true\n    },\n    {\n      \"key_0\": 5422.405753994647\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://crashviewer.nhtsa.dot.gov/CrashAPI",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d5d91422-f8bc-44c9-bc27-4fea71931602",
+    "name": "NHTSA Crash Data Cases API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The NHTSA Crash Data API provides public access to U.S. National Highway Traffic Safety Administration crash datasets including the Fatality Analysis Reporting System (FARS) and the Crash Report Sampling System (CRSS). The API exposes case lists, case details, and aggregated crash queries by location, vehicle, and occupant via REST endpoints that return JSON, XML, or CSV.\n\nContact Support:\n Name: NHTSA",
+      "type": "text/plain"
+    }
+  }
+}

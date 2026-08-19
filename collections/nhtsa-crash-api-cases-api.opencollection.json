@@ -1,0 +1,101 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NHTSA Crash Data Cases API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get case list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://crashviewer.nhtsa.dot.gov/CrashAPI/crashes/GetCaseList",
+            "params": [
+              {
+                "name": "states",
+                "value": "",
+                "type": "query",
+                "description": "State FIPS code(s), comma separated."
+              },
+              {
+                "name": "fromCaseYear",
+                "value": "",
+                "type": "query",
+                "description": "Beginning case year."
+              },
+              {
+                "name": "toCaseYear",
+                "value": "",
+                "type": "query",
+                "description": "Ending case year."
+              },
+              {
+                "name": "minNumOfVehicles",
+                "value": "",
+                "type": "query",
+                "description": "Minimum number of vehicles involved."
+              },
+              {
+                "name": "maxNumOfVehicles",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of vehicles involved."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of crash cases filtered by state, year range, and vehicle count."
+        },
+        {
+          "info": {
+            "name": "Get case details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://crashviewer.nhtsa.dot.gov/CrashAPI/crashes/GetCaseDetails",
+            "params": [
+              {
+                "name": "stateCase",
+                "value": "",
+                "type": "query",
+                "description": "State case number."
+              },
+              {
+                "name": "caseYear",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "State FIPS code."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns full case details for a specific state case number and year."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

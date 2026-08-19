@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NHTSA Crash Data Cases FARS API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "FARS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get FARS dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://crashviewer.nhtsa.dot.gov/CrashAPI/FARSData/GetFARSData",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "FARS dataset name (e.g., Accident, Vehicle, Person)."
+              },
+              {
+                "name": "caseYear",
+                "value": "",
+                "type": "query",
+                "description": "Case year (YYYY)."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format."
+              }
+            ]
+          },
+          "docs": "Returns FARS dataset records for the specified case year and dataset name."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
