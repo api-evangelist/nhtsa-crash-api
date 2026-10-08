@@ -74,6 +74,12 @@ apis:
   - type: Documentation
     url: https://crashviewer.nhtsa.dot.gov/CrashAPI
 common:
+  - type: Plans
+    url: plans/nhtsa-crash-api-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/nhtsa-crash-api-rate-limits.yml
+  - type: FinOps
+    url: finops/nhtsa-crash-api-finops.yml
   - type: AgenticAccess
     url: agentic-access/nhtsa-crash-api-agentic-access.yml
   - type: DomainSecurity
